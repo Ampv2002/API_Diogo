@@ -1,6 +1,6 @@
 <template>
     <v-container>
-      <input type="text" v-model="pesquisa" >
+      <input type="text" v-model="pesquisa" v-on:keyup.enter="procura(pesquisa)" >
           <button @click="procura(pesquisa)">Search</button>
           <hr/>
         <div class="row">
@@ -29,7 +29,7 @@
                 <div v-if="favoritos.length >0">
                   <h3>Favoritos</h3>
                   <div v-for="(fav, index) in favoritos" :key="index">
-                      {{fav.data[0].title}} <v-icon x-small @click="removeFav(index)">mdi-close-circle-outline</v-icon>
+                      {{fav.Title}} <v-icon x-small @click="removeFav(index)">mdi-close-circle-outline</v-icon>
                   </div>
                 </div>
 
@@ -37,25 +37,20 @@
 <!-- Lista Produtos -->
     
       <div class="colunaProduct">
-        <v-card max-width="374"
-            class="mx-auto my-12" v-for="(item, index) in info" :key="index">
-                <v-card-title>{{item.data[0].Title}}</v-card-title>
-                <v-card-text>
-              <v-row>
-                  {{item.data[0].description}}
-              </v-row>
+        <v-card max-width="450"
+            class="mx-auto my-12  " v-for="(item, index) in info" :key="index">
+                <v-card-title class="film">
+                  Titulo:  {{item.Title}} <br>
+                  Year: {{item.Year}} <br>
+                  Type: {{item.Type}}
+                   
+                  </v-card-title>
+                <v-card-text max-width="415" class="poster"   >
+                    <v-img width="300" :src="item.Poster"></v-img>
               </v-card-text>
-                <v-img
-              height="150"
-              :src="item.links[0].href"
-            > 
-            </v-img>
+
               <v-card-actions>
-                <v-btn
-                  color="deep-purple "
-                  text
-                  @click="favorito(item)"
-                >
+                <v-btn color="deep-purple " text @click="favorito(item)">
                   Guardar como Favorito
                 </v-btn>
               </v-card-actions>
@@ -66,6 +61,13 @@
 </template>
 
 <style>
+.poster{
+  display: flex;
+  justify-content: center;
+}
+.film {
+  text-transform: capitalize;
+}
 .row {
   display: flex;
 }
@@ -100,8 +102,8 @@ export default {
   mounted() {
     var that = this;
     axios
-      .get("https://images-api.nasa.gov/search?q=earth&media_type=image")
-      .then(response => (this.info = response.data.collection.items));
+      .get("http://www.omdbapi.com/?s=Batman&page=1&apikey=47a567fc&")
+      .then(response => (this.info = response.data.Search));
     console.log(that.info);
   },
   methods: {
@@ -121,8 +123,8 @@ export default {
     },
 
     procura(pesquisa) {
-      axios.get("https://images-api.nasa.gov/search?q="+ pesquisa + "&media_type=image" )
-      .then(response => (this.info = response.data.collection.items));
+      axios.get("http://www.omdbapi.com/?s="+ encodeURIComponent(pesquisa) + "&apikey=47a567fc&" )
+      .then(response => (this.info = response.data.Search));
     }
   },
 };
