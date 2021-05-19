@@ -73,6 +73,9 @@
 }
 
 .colunaProduct {
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: wrap;
   flex: 60%;
   padding: 10px;
 }

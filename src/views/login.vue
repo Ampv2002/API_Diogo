@@ -11,8 +11,20 @@
     <form class="login-form">
       <input type="text" placeholder="email" v-model="email"/>
       <input type="password" placeholder="password" v-model="password"/>
-      <button>login</button>
-      <p class="message">Not registered? <a href="#" @click="createUser()">Create an account</a></p>
+      <button @click="loginUser()">login</button>
+      <p class="message" @click="createUser()"><a> Not registered? Create an account </a></p>
+       <div v-if="mostrar"> 
+         <v-snackbar
+        :timeout="-1"
+        :value="true"
+        absolute
+        left
+        shaped
+        top
+      >
+        Erro ao autenticar.
+    </v-snackbar>
+       </div>
     </form>
   </div>
 </div>
@@ -26,6 +38,7 @@ export default ({
    return {
       email: '',
       password: '',
+      mostrar: false,
    }
   }, 
   methods: {
@@ -33,9 +46,11 @@ export default ({
         firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
         .then((userCredential) => {
           // Signed in
-          console.log("deu");
-          var user = userCredential.user;
-          console.log(user);
+         
+          var user = userCredential.user; 
+
+           console.log("deu" +user );
+          this.mostrar = false;
           this.$router.push('/produto');        // link to another page if login successfull
           // ...
         })
@@ -44,6 +59,7 @@ export default ({
           var errorCode = error.code;
           var errorMessage = error.message;
           console.log(errorCode + errorMessage);
+          this.mostrar = true;
           // ..
         });
       },
@@ -53,14 +69,16 @@ export default ({
         .then((userCredential) => {
           // Signed in
           var user = userCredential.user;
-          console.log("deu");
           console.log(user);
+          this.mostrar = false;
+          this.$router.push('/produto');
           // ...
         })
         .catch((error) => {
           var errorCode = error.code;
           var errorMessage = error.message;
           console.log(errorCode + errorMessage);
+           this.mostrar = true;
         });
       }
   },
