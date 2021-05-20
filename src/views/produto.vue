@@ -37,16 +37,20 @@
 <!-- Lista Produtos -->
     
       <div class="colunaProduct">
-        <v-card max-width="450"
+        <v-card min-width="450" max-width="450" min-height="866" max-height="866"
             class="mx-auto my-12  " v-for="(item, index) in info" :key="index">
-                <v-card-title class="film">
+                <v-card-title class="film" >
                   Titulo:  {{item.Title}} <br>
                   Year: {{item.Year}} <br>
-                  Type: {{item.Type}}
-                   
+                  Type: {{item.Type}} <br>                  
                   </v-card-title>
-                <v-card-text max-width="415" class="poster"   >
-                    <v-img width="300" :src="item.Poster"></v-img>
+                <!--
+                <v-card-text>
+                  IMDB: <v-btn id="link" href="#" @click:src="imdb(item.imdbID)" target="_blank"> IMDB PAGE </v-btn>
+                </v-card-text>
+                -->
+                <v-card-text max-width="450" min-height="670" class="poster">
+                    <v-img width="450" height="670" :src="item.Poster"></v-img>
               </v-card-text>
 
               <v-card-actions>
@@ -55,7 +59,7 @@
                 </v-btn>
               </v-card-actions>
           </v-card >
-        </div>
+      </div>
   </div>
    </v-container>
 </template>
@@ -65,30 +69,44 @@
   display: flex;
   justify-content: center;
 }
-.film {
-  text-transform: capitalize;
-}
+
 .row {
-  display: flex;
+  display: block;
+  margin: auto;
 }
 
+
 .colunaProduct {
-  display: inline-flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  flex: 60%;
+  flex: 80%;
   padding: 10px;
+  display: grid;
+  gap: 4px;
+  align-items: center;
+  justify-items: center;
+  grid-template-columns: auto auto auto;
+  grid-row-gap: 100px;
+}
+
+.film {
+  text-transform: capitalize;
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+  word-break: break-word;
 }
 
 .colunaFav {
   flex: 40%;
   padding: 10px;
 }
+
+
 </style>
 
 
 
 <script>
+
 import axios from "axios";
 
 export default {
@@ -128,7 +146,15 @@ export default {
     procura(pesquisa) {
       axios.get("http://www.omdbapi.com/?s="+ encodeURIComponent(pesquisa) + "&apikey=47a567fc&" )
       .then(response => (this.info = response.data.Search));
+    },
+
+    imdb(id){
+      var a = document.getElementById('link');
+      a.href = "https://www.imdb.com/title/" + id;
     }
   },
+  beforeCreate: function(){
+    document.body.className = 'Filmes'
+  }
 };
 </script>
