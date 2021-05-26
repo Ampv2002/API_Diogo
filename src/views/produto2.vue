@@ -1,8 +1,7 @@
 <template>
-  <v-container>
+    <v-container>
       <input type="text" v-model="pesquisa" v-on:keyup.enter="procura(pesquisa)" >
           <button @click="procura(pesquisa)">Search</button>
-            <p> Search your movie among our {{info.totalResults}} movies found</p>
           <hr/>
         <div class="row">
          
@@ -30,7 +29,7 @@
                 <div v-if="favoritos.length >0">
                   <h3>Favoritos</h3>
                   <div v-for="(fav, index) in favoritos" :key="index">
-                      {{fav.Title}} <v-icon x-small @click="removeFav(index)">mdi-close-circle-outline</v-icon>
+                      {{fav.data[0].title}} <v-icon x-small @click="removeFav(index)">mdi-close-circle-outline</v-icon>
                   </div>
                 </div>
 
@@ -38,80 +37,50 @@
 <!-- Lista Produtos -->
     
       <div class="colunaProduct">
-        <v-card min-width="450" max-width="450" min-height="866" max-height="866"
-            class="mx-auto my-12  " v-for="(item, index) in info.Search" :key="index">
-            
-                <v-card-title class="film" >
-                  Titulo:  {{item.Title}} <br>
-                  Year: {{item.Year}} <br>
-                  Type: {{item.Type}} <br>                  
+        <v-card max-width="374"
+            class="mx-auto my-12">
+                <v-card-title>
+                  Titulo:  {{info.Title}} <br>
+                  Year: {{info.Year}}
                   </v-card-title>
-                <!--
                 <v-card-text>
-                  IMDB: <v-btn id="link" href="#" @click:src="imdb(item.imdbID)" target="_blank"> IMDB PAGE </v-btn>
-                </v-card-text>
-                -->
-                <v-card-text max-width="450" min-height="670" class="poster">
-                    <v-img width="450" height="670" :src="item.Poster"></v-img>
+
               </v-card-text>
 
               <v-card-actions>
-                <v-btn color="deep-purple " text @click="favorito(item)">
+                <v-btn
+                  color="deep-purple "
+                  text
+                  @click="favorito(item)"
+                >
                   Guardar como Favorito
                 </v-btn>
               </v-card-actions>
           </v-card >
-      </div>
+        </div>
   </div>
-  </v-container>
+   </v-container>
 </template>
 
 <style>
-.poster{
-  display: flex;
-  justify-content: center;
-}
-
 .row {
-  display: block;
-  margin: auto;
+  display: flex;
 }
-
 
 .colunaProduct {
-  flex: 80%;
+  flex: 60%;
   padding: 10px;
-  display: grid;
-  gap: 4px;
-  align-items: center;
-  justify-items: center;
-  grid-template-columns: auto auto auto;
-  grid-row-gap: 100px;
-}
-
-.film {
-  text-transform: capitalize;
-  display: table;
-  table-layout: fixed;
-  width: 100%;
-  flex-grow: 1;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
 }
 
 .colunaFav {
   flex: 40%;
   padding: 10px;
 }
-
-
 </style>
 
 
 
 <script>
-
 import axios from "axios";
 
 export default {
@@ -128,7 +97,7 @@ export default {
   mounted() {
     var that = this;
     axios
-      .get("http://www.omdbapi.com/?s=Batman&page=1&apikey=47a567fc&")
+      .get("http://www.omdbapi.com/?t=blade%20runner%202049&apikey=47a567fc&")
       .then(response => (this.info = response.data));
     console.log(that.info);
   },
@@ -149,17 +118,9 @@ export default {
     },
 
     procura(pesquisa) {
-      axios.get("http://www.omdbapi.com/?s="+ encodeURIComponent(pesquisa) + "&page=1&apikey=47a567fc&" )
+      axios.get("http://www.omdbapi.com/?t="+ encodeURIComponent(pesquisa) + "&apikey=47a567fc&" )
       .then(response => (this.info = response.data));
-    },
-
-    imdb(id){
-      var a = document.getElementById('link');
-      a.href = "https://www.imdb.com/title/" + id;
     }
   },
-  beforeCreate: function(){
-    document.body.className = 'Filmes'
-  }
 };
 </script>

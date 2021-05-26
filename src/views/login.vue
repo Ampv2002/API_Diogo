@@ -145,40 +145,40 @@ export default ({
   color: #4CAF50;
   text-decoration: none;
 }
-.form .register-form {
+.form .register-form  {
   display: none;
 }
-.container {
+.container .Login_Page {
   position: relative;
   z-index: 1;
   max-width: 300px;
   margin: 0 auto;
 }
-.container:before, .container:after {
+.container:before, .container:after .Login_Page {
   content: "";
   display: block;
   clear: both;
 }
-.container .info {
+.container .info .Login_Page {
   margin: 50px auto;
   text-align: center;
 }
-.container .info h1 {
+.container .info h1 .Login_Page {
   margin: 0 0 15px;
   padding: 0;
   font-size: 36px;
   font-weight: 300;
   color: #1a1a1a;
 }
-.container .info span {
+.container .info span .Login_Page {
   color: #4d4d4d;
   font-size: 12px;
 }
-.container .info span a {
+.container .info span a .Login_Page {
   color: #000000;
   text-decoration: none;
 }
-.container .info span .fa {
+.container .info span .fa .Login_Page {
   color: #EF3B3A;
 }
 body.Login_Page {
