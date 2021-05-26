@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import produto from '../views/produto.vue'
 import produtos from '../views/produtos.vue'
+import login from'../views/login.vue'
+import admin from '../views/admin.vue'
 
 Vue.use(VueRouter)
 
@@ -36,6 +38,16 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: produtos
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: login
+  },
+  {
+    path: '/admin',
+    name: 'Admin',
+    component: admin
   }
 ]
 
