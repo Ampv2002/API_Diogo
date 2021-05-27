@@ -8,7 +8,7 @@
                 <v-card-title class="film" >
                   Titulo:  {{item.Title}} <br>
                   Year: {{item.Year}} <br>
-                  Type: {{item.Type}} <br>                  
+                  Type: {{item.Type}} <br>                 
                   </v-card-title>
                 <!--
                 <v-card-text>
@@ -33,11 +33,7 @@
             <v-row justify="center">
             <v-col cols="8">
                 <v-container class="max-width">
-                <v-pagination
-                    v-model="page"
-                    class="my-4"
-                    :length="15" @click="carregaPagina()"
-                ></v-pagination>
+                <v-pagination v-model="page" class="my-4" :length="calculaPaginas(info.totalResults)" :total-visible="7" @input="carregaPagina"></v-pagination>
                 </v-container>
             </v-col>
             </v-row>
@@ -47,31 +43,7 @@
     </div>
 </template>
 
-<script>
 
-import axios from "axios";
-    export default{
-        data () {
-            return {
-                info: '',
-                page: 1,
-            }
-        },
-        mounted(){
-            axios
-            .get("http://www.omdbapi.com/?s=Batman&page=1&apikey=47a567fc&")
-            .then(response => (this.info = response.data));
-        },
-        methods:{
-            carregaPagina(){
-                axios
-                .get("http://www.omdbapi.com/?s=Batman&page="+this.page+"&apikey=47a567fc&")
-                .then(response => (this.info = response.data));
-            }
-        }
-
-    }
-</script>
 
 <style>
 .poster{
@@ -112,5 +84,35 @@ import axios from "axios";
   padding: 10px;
 }
 
-
 </style>
+
+<script>
+import axios from "axios";
+
+export default {
+  data() {
+    return{
+      info: '',
+      page: 1,
+    }
+  },
+
+  mounted(){
+    axios
+    .get("http://www.omdbapi.com/?s=Batman&page=1&apikey=47a567fc&")
+    .then(response => (this.info = response.data));
+  },
+  methods:{
+    carregaPagina(page){
+      axios
+      .get("http://www.omdbapi.com/?s=Batman&page="+page+"&apikey=47a567fc&")
+      .then(response => (this.info = response.data));
+    },
+    calculaPaginas(resultados){
+      var resto_divisao = resultados % 10
+      var paginas = (resultados / 10) - (resto_divisao / 10)
+      return paginas
+    }
+  },
+};
+</script>
