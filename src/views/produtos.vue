@@ -24,28 +24,22 @@
                   Guardar como Favorito
                 </v-btn>
               </v-card-actions>
+            <v-pagination v-model="page" class="my-4" :length="calculaPaginas(info.totalResults)" :total-visible="7" @input="carregaPagina"></v-pagination>
           </v-card >
       </div>
 
-    <v-app id="inspire">
-        <div class="text-center">
-        <v-container>
-            <v-row justify="center">
-            <v-col cols="8">
-                <v-container class="max-width">
-                <v-pagination v-model="page" class="my-4" :length="calculaPaginas(info.totalResults)" :total-visible="7" @input="carregaPagina"></v-pagination>
-                </v-container>
-            </v-col>
-            </v-row>
-        </v-container>
-        </div>
-    </v-app>
     </div>
 </template>
 
 
 
 <style>
+#inspire{
+  align-items: center;
+  justify-items: center;
+  grid-template-columns: auto auto auto;
+}
+
 .poster{
   display: flex;
   justify-content: center;

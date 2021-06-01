@@ -53,21 +53,45 @@
                 </v-card-text>
                 
                 <v-card-text max-width="450" min-height="670" class="poster">
-                    <v-img width="450" height="670" :src="item.Poster"></v-img>
+                    <v-img v-if="item.Poster != 'N/A'" width="450" height="670" :src="item.Poster"></v-img>
+                    <v-img v-else width="450" height="670" :src="not_found"></v-img>
               </v-card-text>
 
               <v-card-actions>
                 <v-btn elevation="15" outlined color="#29B6F6" text @click="favorito(item)">
                   Guardar como Favorito
                 </v-btn>
-                
               </v-card-actions>
           </v-card >
       </div>
   </div>
+    <v-app v-if="keep_search != null || info.totalResults <= 10 " id="inspire">
+        <div class="text-center">
+        <v-container max-width="100" min-height="100">
+            <v-row justify="center">
+            <v-col>
+                <v-container>
+                <v-pagination v-model="page" class="my-1" :length="calculaPaginas(info.totalResults)" :total-visible="11" @input="carregaPagina"></v-pagination>
+                </v-container>
+            </v-col>
+            </v-row>
+        </v-container>
+        </div>
+    </v-app>
   </v-container>
+  
 </template>
 <style>
+.inspire{
+  align-items: center;
+  justify-items: center;
+  grid-template-columns: auto auto auto;
+}
+
+.v-application--wrap{
+  height: 130px;
+}
+
 .poster{
   display: flex;
   justify-content: center;
@@ -108,182 +132,67 @@
 </style>
 
 <style lang="scss">
-#checklist {
-  --background: #ffffff;
-  --text: #414856;
-  --check: #4F29F0;
-  --disabled: #C3C8DE;
-  --width: 100px;
-  --height: 140px;
-  --border-radius: 10px;
-  background: var(--background);
-  width: var(--width);
-  height: var(--height);
-  border-radius: var(--border-radius);
-  position: relative;
-  box-shadow: 0 10px 30px rgba(#414856, 0.05);
-  padding: 30px 45px;
+:root {
+  --color: rebeccapurple;
+  --disabled: #959495;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+.checkbox {
   display: grid;
-  grid-template-columns: 30px auto;
-  align-items: center;
-  label {
-    color: var(--text);
-    position: relative;
-    cursor: pointer;
-    display: grid;
-    align-items: center;
-    width: fit-content;
-    transition: color .3s ease;
-    &::before,
-    &::after {
-      content:"";
-      position: absolute;
-    }
-    &::before {
-      height: 2px;
-      width: 8px;
-      left: -27px;
-      background: var(--check);
-      border-radius: 2px;
-      transition: background .3s ease; 
-    }
-    &:after {
-      height: 4px;
-      width: 4px;
-      top: 8px;
-      left: -25px;
-      border-radius: 50%;
-    }
-  }
-  input[type="checkbox"] {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    position: relative;
-    height: 15px;
-    width: 15px;
-    outline: none;
-    border: 0;
-    margin: 0 15px 0 0;
-    cursor: pointer;
-    background: var(--background);
-    display: grid;
-    align-items: center;
-    &::before,
-    &::after {
-      content:"";
-      position: absolute;
-      height: 2px;
-      top: auto;
-      background: var(--check);
-      border-radius: 2px;
-    }
-    &::before {
-      width: 0px;
-      right: 60%;
-      transform-origin: right bottom;
-    }
-    &::after {
-      width: 0px;
-      left: 40%;
-      transform-origin: left bottom;
-    }
-    &:checked {
-      &::before {
-        animation: check-01 .4s ease forwards;
-      }
-      &::after {
-        animation: check-02 .4s ease forwards;
-      }
-      + label {
-        color: var(--disabled);
-        animation: move .3s ease .1s forwards;
-        &::before {
-          background: var(--disabled);
-          animation: slice .4s ease forwards;
-        }
-        &::after {
-          animation: firework .5s ease forwards .1s;
-        }
-      }
-    }
+  grid-template-columns: min-content auto;
+  grid-gap: 0.5em;
+  font-size: 2rem;
+  color: var(--color);
+
+  &--disabled {
+    color: var(--disabled);
   }
 }
 
-@keyframes move {
-  50% {
-    padding-left: 8px;
-    padding-right: 0px;
-  }
-  100% {
-    padding-right: 4px;
-  }
-}
-@keyframes slice {
-  60% {
-    width: 100%;
-    left: 4px;
-  }
-  100% {
-    width: 100%;
-    left: -2px;
-    padding-left: 0;
+.checkbox__control {
+  display: inline-grid;
+  width: 1em;
+  height: 1em;
+  border-radius: 0.25em;
+  border: 0.1em solid currentColor;
+
+  svg {
+    transition: transform 0.1s ease-in 25ms;
+    transform: scale(0);
+    transform-origin: bottom left;
   }
 }
-@keyframes check-01 {
-  0% {
-    width: 4px;
-    top: auto;
-    transform: rotate(0);
+
+.checkbox__input {
+  display: grid;
+  grid-template-areas: "checkbox";
+
+  > * {
+    grid-area: checkbox;
   }
-  50% {
-    width: 0px;
-    top: auto;
-    transform: rotate(0);
-  }
-  51% {
-    width: 0px;
-    top: 8px;
-    transform: rotate(45deg);
-  }
-  100% {
-    width: 5px;
-    top: 8px;
-    transform: rotate(45deg);
-  }
-}
-@keyframes check-02 {
-  0% {
-    width: 4px;
-    top: auto;
-    transform: rotate(0);
-  }
-  50% {
-    width: 0px;
-    top: auto;
-    transform: rotate(0);
-  }
-  51% {
-    width: 0px;
-    top: 8px;
-    transform: rotate(-45deg);
-  }
-  100% {
-    width: 10px;
-    top: 8px;
-    transform: rotate(-45deg);
-  }
-}
-@keyframes firework {
-  0% {
-    opacity: 1;
-    box-shadow: 0 0 0 -2px #4F29F0, 0 0 0 -2px #4F29F0, 0 0 0 -2px #4F29F0, 0 0 0 -2px #4F29F0, 0 0 0 -2px #4F29F0, 0 0 0 -2px #4F29F0;
-  }
-  30% {
-    opacity: 1;
-  }
-  100% {
+
+  input {
     opacity: 0;
-    box-shadow: 0 -15px 0 0px #4F29F0, 14px -8px 0 0px #4F29F0, 14px 8px 0 0px #4F29F0, 0 15px 0 0px #4F29F0, -14px 8px 0 0px #4F29F0, -14px -8px 0 0px #4F29F0;
+    width: 1em;
+    height: 1em;
+
+    &:focus + .checkbox__control {
+      box-shadow: 0 0 0 0.05em #fff, 0 0 0.15em 0.1em currentColor;
+    }
+
+    &:checked + .checkbox__control svg {
+      transform: scale(1);
+    }
+
+    &:disabled + .checkbox__control {
+      color: var(--disabled);
+    }
   }
 }
 </style>
@@ -297,7 +206,11 @@ export default {
   data() {
     return {
       info: null,
+      page: 1,
       favoritos: [],
+      keep_search: null,
+      not_found: "https://westsiderc.org/wp-content/uploads/2019/08/Image-Not-Available.png",
+      watched: false,
       vertical: true,
       multiLine: true,
       snackbar: false,
@@ -328,17 +241,29 @@ export default {
     },
 
     procura(pesquisa) {
+      this.keep_search = pesquisa
       axios.get("http://www.omdbapi.com/?s="+ encodeURIComponent(pesquisa) + "&page=1&apikey=47a567fc&" )
       .then(response => (this.info = response.data));
     },
-
   
   btnClick(id) {
       window.open("https://www.imdb.com/title/"+ id +"/");
     },
   beforeCreate: function(){
     document.body.className = 'Filmes'
-  }
+  },
+  
+  carregaPagina(page){
+    axios
+    .get("http://www.omdbapi.com/?s="+encodeURIComponent(this.keep_search)+"&page="+page+"&apikey=47a567fc&")
+    .then(response => (this.info = response.data));
+  },
+
+  calculaPaginas(resultados){
+    var resto_divisao = resultados % 10
+    var paginas = (resultados / 10) - (resto_divisao / 10)
+    return paginas
+  },
 }
 };
 </script>
