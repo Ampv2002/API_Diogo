@@ -1,4 +1,5 @@
 <template>
+<div>
   <v-container>
       <input type="text" v-model="pesquisa" v-on:keyup.enter="procura(pesquisa)" >
           <button @click="procura(pesquisa)">Search</button>
@@ -58,15 +59,14 @@
               </v-card-text>
 
               <v-card-actions>
-                <v-btn elevation="15" outlined color="#29B6F6" text @click="favorito(item)">
+                <v-btn elevation="1" x-large depressed outlined color="#29B6F6" text @click="favorito(item)">
                   Guardar como Favorito
                 </v-btn>
               </v-card-actions>
           </v-card >
       </div>
   </div>
-    <v-app v-if="keep_search != null || info.totalResults <= 10 " id="inspire">
-        <div class="text-center">
+        <div class="text-center" v-if="keep_search != null || info.totalResults <= 10 ">
         <v-container max-width="100" min-height="100">
             <v-row justify="center">
             <v-col>
@@ -77,19 +77,18 @@
             </v-row>
         </v-container>
         </div>
-    </v-app>
   </v-container>
-  
+</div>
 </template>
 <style>
-.inspire{
-  align-items: center;
-  justify-items: center;
-  grid-template-columns: auto auto auto;
+.admin{
+    background-color: lightgrey;
+
 }
 
-.v-application--wrap{
-  height: 130px;
+.Filmes{
+  font-family: Calibre, "San Francisco", "SF Pro Text", -apple-system, system-ui, BlinkMacSystemFont, Roboto, "Helvetica Neue", "Segoe UI", Arial, sans-serif;
+  background-color: lightgrey;
 }
 
 .poster{
@@ -115,10 +114,12 @@
 }
 
 .film {
+
   text-transform: capitalize;
   display: table;
   table-layout: fixed;
   width: 100%;
+  word-break: break-word;
   flex-grow: 1;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -128,6 +129,11 @@
 .colunaFav {
   flex: 40%;
   padding: 10px;
+}
+
+.v-btn:hover {
+  text-decoration: underline;
+  
 }
 </style>
 

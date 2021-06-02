@@ -1,6 +1,5 @@
 <template>
-    <div id="app">
-
+    <div>
         <div class="colunaProduct">
         <v-card min-width="450" max-width="450" min-height="866" max-height="866"
             class="mx-auto my-12  " v-for="(item, index) in info.Search" :key="index">
@@ -24,22 +23,29 @@
                   Guardar como Favorito
                 </v-btn>
               </v-card-actions>
-            <v-pagination v-model="page" class="my-4" :length="calculaPaginas(info.totalResults)" :total-visible="7" @input="carregaPagina"></v-pagination>
           </v-card >
       </div>
-
+      <v-app>
+        <div class="text-center">
+        <v-container>
+            <v-row justify="center">
+            <v-col cols="8">
+                <v-container class="max-width">
+                <v-pagination v-model="page" class="my-4" :length="calculaPaginas(info.totalResults)" :total-visible="7" @input="carregaPagina"></v-pagination>
+                </v-container>
+            </v-col>
+            </v-row>
+        </v-container>
+        <Footer_default/>
+        </div>
+    </v-app>
     </div>
+
 </template>
 
 
 
 <style>
-#inspire{
-  align-items: center;
-  justify-items: center;
-  grid-template-columns: auto auto auto;
-}
-
 .poster{
   display: flex;
   justify-content: center;
@@ -82,8 +88,13 @@
 
 <script>
 import axios from "axios";
+import Footer_default from '@/components/Footer_Root.vue' 
 
 export default {
+  name: 'produtos',
+    components: {
+    Footer_default
+  },
   data() {
     return{
       info: '',
