@@ -62,6 +62,8 @@
                 <v-btn elevation="1" x-large depressed outlined color="#29B6F6" text @click="favorito(item)">
                   Guardar como Favorito
                 </v-btn>
+                <v-btn class="ma-2" x-large color="primary" dark @click="toggle_watched(item)">Watched<v-icon :color="myIcon.color"  right>{{myIcon.name}}</v-icon>
+                </v-btn>
               </v-card-actions>
           </v-card >
       </div>
@@ -207,16 +209,26 @@
 <script>
 
 import axios from "axios";
+import { mdiThumbUpOutline } from '@mdi/js';
+import { mdiThumbUp } from '@mdi/js';
 
 export default {
   data() {
     return {
+      myIcon:{
+        name: mdiThumbUpOutline,
+        color: 'red'
+      },
+      colors: {
+        blue: 'blue',
+        red: 'red'
+      },
       info: null,
       page: 1,
       favoritos: [],
+      watched: [],
       keep_search: null,
       not_found: "https://westsiderc.org/wp-content/uploads/2019/08/Image-Not-Available.png",
-      watched: false,
       vertical: true,
       multiLine: true,
       snackbar: false,
@@ -243,7 +255,20 @@ export default {
 
     removeFav(item){
       this.favoritos.splice(item, 1)
+      
+    },
 
+    toggle_watched(item){
+      if (this.watched.indexOf(item) === -1){
+        this.watched.push(item)
+        this.myIcon.name = mdiThumbUp
+        this.myIcon.color = this.colors.blue
+      }
+      else{
+        this.watched.splice(item, 1)
+        this.myIcon.name = mdiThumbUpOutline
+        this.myIcon.color = this.colors.red
+      }
     },
 
     procura(pesquisa) {

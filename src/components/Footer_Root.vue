@@ -16,9 +16,6 @@
 </template>
 
 <style>
-.style{
-  width: 100%;
-}
 </style>
 <script>
   export default {
