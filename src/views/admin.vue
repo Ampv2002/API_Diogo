@@ -7,11 +7,11 @@
     <br>
         <div class="input-control">
             <label>Title</label>
-            <input type="text" v-model="novoFilme.Title">
+            <input type="text" v-model="novoFilme.Title" >
         </div>
         <div class="input-control">
             <label>Year</label>
-            <input type="text" v-model="novoFilme.Year">
+            <input type="text" v-model="novoFilme.Year" >
         </div>
         <div class="input-control">
             <label>Type</label>
@@ -20,6 +20,10 @@
          <div class="input-control">
             <label>Poster</label>
             <input type="text" v-model="novoFilme.Poster">
+        </div>
+        <div class="input-control">
+            <label>imdbID</label>
+            <input type="text" v-model="novoFilme.imdbID">
         </div>
         <br>
         <button  v-on:click="submitBut" type="submit" class="button">Enviar</button>
@@ -33,22 +37,25 @@ export default {
         return {
             novoFilme:{
                 Title: '',
-                Year: ''
+                Year: '',
+                Type: '',
+                Poster: '',
+                imdbID: ''
 
             }
         }
     },
     methods:{
        submeterfilme(){
-           return axios.post('https://projeto-frontend-default-rtdb.europe-west1.firebasedatabase.app/movies.json', this.novoFilme);
+           return axios.post('https://projeto-frontend-default-rtdb.europe-west1.firebasedatabase.app/Search.json', this.novoFilme);
        },
        submitBut: () => {
                 alert('Filme introduzido com sucesso!')
             }
     },
     beforeCreate: function(){
-    document.body.className = 'Admin'
-  }
+        document.body.className = 'admin'
+    }
 }
 </script>
 <style scoped>
@@ -56,23 +63,24 @@ export default {
     width: auto;
     display: flex;
     justify-content: center;
+    height: 100%;
 }
 
 
 .form{
-    
+    font-family: Calibre, "San Francisco", "SF Pro Text", -apple-system, system-ui, BlinkMacSystemFont, Roboto, "Helvetica Neue", "Segoe UI", Arial, sans-serif;
     color:#06c4d1;
-    max-width: 550px;
+    width: 600px;
     box-sizing: border-box;
-    margin: 30px;
+    margin: 100px;
     margin-top: 60px;
     padding: 30px;
     text-align: justify;
     box-shadow: 0 0 24px rgba(0, 0, 0, 0.3);
-    width: 100%;
 }
 
 .button{
+    
     font: inherit;
     cursor: pointer;
     border-radius: 4px;

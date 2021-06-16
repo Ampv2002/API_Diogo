@@ -1,102 +1,44 @@
 <template>
-<div class="login-page">
-  <div class="form">
-    <form class="register-form">
-      <input type="text" placeholder="name"/>
-      <input type="password" placeholder="password"/>
-      <input type="text" placeholder="email address"/>
-      <button>create</button>
-      <p class="message">Already registered? <a href="#">Sign In</a></p>
-    </form>
-    <form class="login-form">
-      <input type="text" placeholder="email" v-model="email"/>
-      <input type="password" placeholder="password" v-model="password"/>
-      <button @click="loginUser()">login</button>
-      <p class="message" @click="createUser()"><a> Not registered? Create an account </a></p>
-       <div v-if="mostrar"> 
-         <v-snackbar
-        :timeout="-1"
-        :value="true"
-        absolute
-        left
-        shaped
-        top
-      >
-        Erro ao autenticar.
-    </v-snackbar>
-       </div>
-    </form>
+  <div class="login-page">
+    <div class="form">
+      <form class="register-form">
+        <input type="text" placeholder="name"/>
+        <input type="password" placeholder="password"/>
+        <input type="text" placeholder="email address"/>
+        <button>create</button>
+        <p class="message">Already registered? <a href="#">Sign In</a></p>
+      </form>
+      <form class="login-form">
+        <input type="text" placeholder="email" v-model="email"/>
+        <input type="password" placeholder="password" v-model="password"/>
+        <button @click="loginUser()">login</button>
+        <p class="message" @click="createUser()"><a> Not registered? Create an account </a></p>
+        <div v-if="mostrar"> 
+          <v-snackbar
+          :timeout="-1"
+          :value="true"
+          absolute
+          left
+          shaped
+          top
+        >
+          Erro ao autenticar.
+      </v-snackbar>
+        </div>
+      </form>
+    </div>
   </div>
-</div>
 </template>
 
-<script>
-import firebase from 'firebase'
 
-export default ({
-  data() {
-   return {
-      email: '',
-      password: '',
-      mostrar: false,
-   }
-  }, 
-  methods: {
-      createUser(){
-        firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
-        .then((userCredential) => {
-          // Signed in
-         
-          var user = userCredential.user; 
-
-           console.log("deu" +user );
-          this.mostrar = false;
-          this.$router.push('/produto');        // link to another page if login successfull
-          // ...
-        })
-        .catch((error) => {
-          console.log("nao deu");
-          var errorCode = error.code;
-          var errorMessage = error.message;
-          console.log(errorCode + errorMessage);
-          this.mostrar = true;
-          // ..
-        });
-      },
-
-      loginUser(){
-        firebase.auth().signInWithEmailAndPassword(this.email, this.password)
-        .then((userCredential) => {
-          // Signed in
-          var user = userCredential.user;
-          console.log(user);
-          this.mostrar = false;
-          this.$router.push('/produto');
-          // ...
-        })
-        .catch((error) => {
-          var errorCode = error.code;
-          var errorMessage = error.message;
-          console.log(errorCode + errorMessage);
-           this.mostrar = true;
-        });
-      }
-  },
-  beforeCreate: function(){
-    document.body.className = 'Login_Page'
-  }
-})
-</script>
-
-
-<style>
-
-
+<style scoped>
 @import url(https://fonts.googleapis.com/css?family=Roboto:300);
 .login-page {
   width: 360px;
   padding: 8% 0 0;
   margin: auto;
+  height: 100%;
+  
 }
 .form {
   position: relative;
@@ -145,51 +87,114 @@ export default ({
   color: #4CAF50;
   text-decoration: none;
 }
-.form .register-form  {
+.form .register-form {
   display: none;
 }
-.container .Login_Page {
+.container {
   position: relative;
   z-index: 1;
   max-width: 300px;
   margin: 0 auto;
 }
-.container:before, .container:after .Login_Page {
+.container:before, .container:after {
   content: "";
   display: block;
   clear: both;
 }
-.container .info .Login_Page {
+.container .info {
   margin: 50px auto;
   text-align: center;
 }
-.container .info h1 .Login_Page {
+.container .info h1 {
   margin: 0 0 15px;
   padding: 0;
   font-size: 36px;
   font-weight: 300;
   color: #1a1a1a;
 }
-.container .info span .Login_Page {
+.container .info span {
   color: #4d4d4d;
   font-size: 12px;
 }
-.container .info span a .Login_Page {
+.container .info span a {
   color: #000000;
   text-decoration: none;
 }
-.container .info span .fa .Login_Page {
+.container .info span .fa {
   color: #EF3B3A;
 }
-body.Login_Page {
-  background: #76b852; /* fallback for old browsers */
+body >>> .login-page{
+  background-color: #76b852 !important; /* fallback for old browsers */
   background: -webkit-linear-gradient(right, #76b852, #8DC26F);
   background: -moz-linear-gradient(right, #76b852, #8DC26F);
   background: -o-linear-gradient(right, #76b852, #8DC26F);
   background: linear-gradient(to left, #76b852, #8DC26F);
   font-family: "Roboto", sans-serif;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;      
+  -moz-osx-font-smoothing: grayscale;   
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  min-height: 100vh;   
 }
-
 </style>
+
+<script>
+import firebase from 'firebase'
+export default ({
+  data() {
+   return {
+      email: '',
+      password: '',
+      mostrar: false,
+   }
+  }, 
+  methods: {
+      createUser(){
+        firebase.auth().createUserWithEmailAndPassword(this.email, this.password)
+        .then((userCredential) => {
+          // Signed in
+         
+          var user = userCredential.user; 
+
+           console.log("deu" +user );
+          this.mostrar = false;
+          this.$router.push('/produto');        // link to another page if login successfull
+          // ...
+        })
+        .catch((error) => {
+          console.log("nao deu");
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          console.log(errorCode + errorMessage);
+          this.mostrar = true;
+          // ..
+        });
+      },
+
+      loginUser(){
+        firebase.auth().signInWithEmailAndPassword(this.email, this.password)
+        .then((userCredential) => {
+          // Signed in
+          var user = userCredential.user;
+          console.log(user);
+          this.mostrar = false;
+          this.$router.push('/produto');
+          // ...
+        })
+        .catch((error) => {
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          console.log(errorCode + errorMessage);
+           this.mostrar = true;
+        });
+      },
+      beforeCreate: function(){
+        document.body.className = 'Login_Page'
+      }
+
+  },
+
+})
+</script>
+ 

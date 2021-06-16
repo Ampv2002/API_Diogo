@@ -62,13 +62,11 @@
                 <v-btn elevation="1" x-large depressed outlined color="#29B6F6" text @click="favorito(item)">
                   Guardar como Favorito
                 </v-btn>
-                <v-btn class="ma-2" x-large color="primary" dark @click="toggle_watched(item)">Watched<v-icon :color="myIcon.color"  right>{{myIcon.name}}</v-icon>
-                </v-btn>
               </v-card-actions>
           </v-card >
       </div>
   </div>
-        <div class="text-center" v-if="keep_search != null || info.totalResults <= 10 ">
+        <div class="text-center" v-if="keep_search != null || info.totalResults >= 10 ">
         <v-container max-width="100" min-height="100">
             <v-row justify="center">
             <v-col>
@@ -82,7 +80,9 @@
   </v-container>
 </div>
 </template>
-<style>
+
+
+<style scoped>
 .admin{
     background-color: lightgrey;
 
@@ -139,94 +139,15 @@
 }
 </style>
 
-<style lang="scss">
-:root {
-  --color: rebeccapurple;
-  --disabled: #959495;
-}
-
-*,
-*:before,
-*:after {
-  box-sizing: border-box;
-}
-
-.checkbox {
-  display: grid;
-  grid-template-columns: min-content auto;
-  grid-gap: 0.5em;
-  font-size: 2rem;
-  color: var(--color);
-
-  &--disabled {
-    color: var(--disabled);
-  }
-}
-
-.checkbox__control {
-  display: inline-grid;
-  width: 1em;
-  height: 1em;
-  border-radius: 0.25em;
-  border: 0.1em solid currentColor;
-
-  svg {
-    transition: transform 0.1s ease-in 25ms;
-    transform: scale(0);
-    transform-origin: bottom left;
-  }
-}
-
-.checkbox__input {
-  display: grid;
-  grid-template-areas: "checkbox";
-
-  > * {
-    grid-area: checkbox;
-  }
-
-  input {
-    opacity: 0;
-    width: 1em;
-    height: 1em;
-
-    &:focus + .checkbox__control {
-      box-shadow: 0 0 0 0.05em #fff, 0 0 0.15em 0.1em currentColor;
-    }
-
-    &:checked + .checkbox__control svg {
-      transform: scale(1);
-    }
-
-    &:disabled + .checkbox__control {
-      color: var(--disabled);
-    }
-  }
-}
-</style>
-
-
 <script>
 
 import axios from "axios";
-import { mdiThumbUpOutline } from '@mdi/js';
-import { mdiThumbUp } from '@mdi/js';
-
 export default {
   data() {
     return {
-      myIcon:{
-        name: mdiThumbUpOutline,
-        color: 'red'
-      },
-      colors: {
-        blue: 'blue',
-        red: 'red'
-      },
       info: null,
       page: 1,
       favoritos: [],
-      watched: [],
       keep_search: null,
       not_found: "https://westsiderc.org/wp-content/uploads/2019/08/Image-Not-Available.png",
       vertical: true,
@@ -238,7 +159,7 @@ export default {
   mounted() {
     var that = this;
     axios
-      .get("http://www.omdbapi.com/?s=Batman&page=1&apikey=47a567fc&")
+      .get("https://projeto-frontend-default-rtdb.europe-west1.firebasedatabase.app/.json")
       .then(response => (this.info = response.data));
     console.log(that.info);
   },
@@ -256,19 +177,6 @@ export default {
     removeFav(item){
       this.favoritos.splice(item, 1)
       
-    },
-
-    toggle_watched(item){
-      if (this.watched.indexOf(item) === -1){
-        this.watched.push(item)
-        this.myIcon.name = mdiThumbUp
-        this.myIcon.color = this.colors.blue
-      }
-      else{
-        this.watched.splice(item, 1)
-        this.myIcon.name = mdiThumbUpOutline
-        this.myIcon.color = this.colors.red
-      }
     },
 
     procura(pesquisa) {

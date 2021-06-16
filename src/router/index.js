@@ -5,6 +5,7 @@ import produto from '../views/produto.vue'
 import produtos from '../views/produtos.vue'
 import login from'../views/login.vue'
 import admin from '../views/admin.vue'
+import error_page from '../views/error_page.vue'
 
 Vue.use(VueRouter)
 
@@ -48,6 +49,11 @@ const routes = [
     path: '/admin',
     name: 'Admin',
     component: admin
+  },
+  {
+    path: '*',
+    name: 'Error_page',
+    component: error_page
   }
 ]
 
